@@ -7,10 +7,7 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { LoginDto } from './Login.dto';
-
-const VALID_LOGIN = 'nest';
-const VALID_PW = 'js2023';
-const VALID_TOKEN = 'dasfaklasdhjfjkasdhfjksdhlfhjksdhlf123414er';
+import { VALID_LOGIN, VALID_PW, VALID_TOKEN } from '../constants/auth';
 
 @Controller('login')
 export class LoginController {
