@@ -1,10 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { VALID_TOKEN } from '../constants/auth';
+import { VALID_TOKEN } from '../../constants/credentials';
 
 @Injectable()
-// TODO: unauth, not forbidden!!
-export class AuthGuard implements CanActivate {
+export class AuthzGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

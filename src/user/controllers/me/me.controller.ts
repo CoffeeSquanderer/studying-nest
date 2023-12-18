@@ -1,9 +1,9 @@
 import { Controller, Get, Ip, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../../auth/auth/auth.guard';
+import { AuthzGuard } from '../../../auth/guards/authz/authz.guard';
 import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @Controller('me')
-@UseGuards(AuthGuard)
+@UseGuards(AuthzGuard)
 export class MeController {
   @Get()
   @ApiOkResponse({

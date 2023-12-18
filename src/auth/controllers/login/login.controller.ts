@@ -8,7 +8,11 @@ import {
 import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { LoginDto } from './Login.dto';
-import { VALID_LOGIN, VALID_PW, VALID_TOKEN } from '../constants/auth';
+import {
+  VALID_LOGIN,
+  VALID_PW,
+  VALID_TOKEN,
+} from '../../constants/credentials';
 
 @Controller('login')
 export class LoginController {
