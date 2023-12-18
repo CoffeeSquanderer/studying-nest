@@ -2,7 +2,8 @@ import {
   Controller,
   Post,
   Body,
-  BadRequestException,
+  NotAcceptableException,
+  UnauthorizedException,
   Res,
 } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
@@ -26,14 +27,14 @@ export class LoginController {
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
     const { login, password } = loginDto;
     if (!login) {
-      throw new BadRequestException('No login');
+      throw new NotAcceptableException('No login');
     }
     if (!password) {
-      throw new BadRequestException('No password');
+      throw new NotAcceptableException('No password');
     }
     if (login !== VALID_LOGIN || password !== VALID_PW) {
-      throw new BadRequestException('Login or password is invalid');
+      throw new UnauthorizedException('Login or password is invalid');
     }
-    response.status(200).cookie('AUTH_TOKEN', VALID_TOKEN).end();
+    response.status(200).send({ 'X-Auth-Token': VALID_TOKEN });
   }
 }
