@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { VALID_TOKEN } from '../constants/auth';
 
 @Injectable()
+// TODO: unauth, not forbidden!!
 export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,

@@ -30,9 +30,6 @@ export class LoginController {
     if (login !== VALID_LOGIN || password !== VALID_PW) {
       throw new BadRequestException('Login or password is invalid');
     }
-    response
-      .cookie('AUTH_TOKEN', VALID_TOKEN)
-      .status(201)
-      .send('Logged in successfully');
+    response.status(200).cookie('AUTH_TOKEN', VALID_TOKEN).end();
   }
 }
