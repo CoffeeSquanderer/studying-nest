@@ -9,14 +9,12 @@ import {
 import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { LoginDto } from './Login.dto';
-import {
-  VALID_LOGIN,
-  VALID_PW,
-  VALID_TOKEN,
-} from '../../constants/credentials';
+import { LoginService } from 'src/auth/services/login/login.service';
 
 @Controller('login')
 export class LoginController {
+  constructor(private loginService: LoginService) {}
+
   @Post()
   @ApiBadRequestResponse({
     description: 'No login, no password, or any of them are invalid.',
@@ -32,9 +30,11 @@ export class LoginController {
     if (!password) {
       throw new NotAcceptableException('No password');
     }
-    if (login !== VALID_LOGIN || password !== VALID_PW) {
+    if (this.loginService.checkCredentials(login, password)) {
       throw new UnauthorizedException('Login or password is invalid');
     }
-    response.status(200).send({ 'X-Auth-Token': VALID_TOKEN });
+    response
+      .status(200)
+      .send({ 'X-Auth-Token': this.loginService.generateToken() });
   }
 }

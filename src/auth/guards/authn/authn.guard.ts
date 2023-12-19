@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { ValidateTokenService } from '../../validate-token/validate-token.service';
+import { ValidateTokenService } from '../../services/validate-token/validate-token.service';
 
 @Injectable()
 export class AuthnGuard implements CanActivate {

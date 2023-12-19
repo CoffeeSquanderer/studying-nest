@@ -1,4 +1,4 @@
-import { ValidateTokenService } from 'src/auth/validate-token/validate-token.service';
+import { ValidateTokenService } from 'src/auth/services/validate-token/validate-token.service';
 import { AuthnGuard } from './authn.guard';
 
 describe('AuthnGuard', () => {
