@@ -5,6 +5,7 @@ import {
   NotAcceptableException,
   UnauthorizedException,
   Res,
+  Logger,
 } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
@@ -13,6 +14,8 @@ import { LoginService } from 'src/auth/services/login/login.service';
 
 @Controller('login')
 export class LoginController {
+  private readonly logger = new Logger(LoginController.name);
+
   constructor(private loginService: LoginService) {}
 
   @Post()
@@ -25,16 +28,18 @@ export class LoginController {
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
     const { login, password } = loginDto;
     if (!login) {
+      this.logger.log('Attempting to log in, login is not provided.');
       throw new NotAcceptableException('No login');
     }
     if (!password) {
+      this.logger.log('Attempting to log in, password is not provided.');
       throw new NotAcceptableException('No password');
     }
-    if (this.loginService.checkCredentials(login, password)) {
+    if (!this.loginService.checkCredentials(login, password)) {
       throw new UnauthorizedException('Login or password is invalid');
     }
     response
       .status(200)
-      .send({ 'X-Auth-Token': this.loginService.generateToken() });
+      .send({ 'X-Auth-Token': this.loginService.generateToken(login) });
   }
 }

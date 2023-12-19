@@ -3,7 +3,8 @@ import { VALID_TOKEN } from '../../constants/credentials';
 
 @Injectable()
 export class ValidateTokenService {
-  public isValid(token: string) {
-    return token && token === VALID_TOKEN;
+  public checkIsValid(token: string) {
+    const isValid = token && token === VALID_TOKEN;
+    return isValid;
   }
 }
