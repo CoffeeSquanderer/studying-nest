@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiUnauthorizedResponse, ApiOkResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
-import { LoginDto } from './Login.dto';
+import { LoginDto } from '../../models/Login.dto';
 import { LoginService } from 'src/auth/services/login/login.service';
 
 @Controller('login')
