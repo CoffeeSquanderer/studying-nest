@@ -11,6 +11,15 @@ async function bootstrap() {
     .setDescription('API description')
     .setVersion('0.1')
     .addTag('')
+    .addBasicAuth(
+      {
+        type: 'apiKey',
+        in: 'header',
+        name: 'X-Auth-Token',
+        'x-tokenName': 'X-Auth-Token',
+      },
+      'X-Auth-Token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

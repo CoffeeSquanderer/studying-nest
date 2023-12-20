@@ -7,7 +7,7 @@ import {
   Res,
   Logger,
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiUnauthorizedResponse, ApiOkResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { LoginDto } from './Login.dto';
 import { LoginService } from 'src/auth/services/login/login.service';
@@ -19,11 +19,11 @@ export class LoginController {
   constructor(private loginService: LoginService) {}
 
   @Post()
-  @ApiBadRequestResponse({
+  @ApiUnauthorizedResponse({
     description: 'No login, no password, or any of them are invalid.',
   })
-  @ApiCreatedResponse({
-    description: 'Successful login, AUTH_TOKEN cookie is set.',
+  @ApiOkResponse({
+    description: 'Successful login, auth token returned.',
   })
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
     const { login, password } = loginDto;

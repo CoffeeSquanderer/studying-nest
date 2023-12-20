@@ -1,10 +1,15 @@
 import { Controller, Get, Ip, UseGuards } from '@nestjs/common';
 import { AuthnGuard } from '../../../auth/guards/authn/authn.guard';
-import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiBasicAuth,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('me')
 @UseGuards(AuthnGuard)
 export class MeController {
+  @ApiBasicAuth('X-Auth-Token')
   @Get()
   @ApiOkResponse({
     description: 'User data.',
