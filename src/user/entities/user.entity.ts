@@ -12,4 +12,10 @@ export class User extends Model {
 
   @Column
   email: string;
+
+  @Column
+  login: string;
+
+  @Column
+  password: string;
 }
