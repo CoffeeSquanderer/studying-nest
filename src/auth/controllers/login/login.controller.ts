@@ -39,7 +39,11 @@ export class LoginController {
       this.logger.log('Attempting to log in, password is not provided.');
       throw new NotAcceptableException('No password');
     }
-    if (!this.userService.checkCredentials(login, password)) {
+    const areCredsValid = await this.userService.checkCredentials(
+      login,
+      password,
+    );
+    if (!areCredsValid) {
       throw new UnauthorizedException('Login or password is invalid');
     }
     response
