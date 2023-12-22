@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-import { VALID_LOGIN, VALID_PW } from '../../auth/constants/credentials';
 
 @Injectable()
 export class UserService {
@@ -37,20 +36,22 @@ export class UserService {
     return this.userRepository.destroy({ where: { id } });
   }
 
-  checkCredentials(login: string, password: string) {
-    const isLoginValid = login === VALID_LOGIN;
-    if (!isLoginValid) {
+  // TODO: check by email (?)
+  async checkCredentials(login: string, password: string) {
+    const user = await this.userRepository.findOne({ where: { login } });
+    if (!user) {
       this.logger.log(
-        `Attempting to log in as login="${login}", user does not exist.`,
+        `Attempting to check credentials for login="${login}", user does not exist.`,
       );
       return false;
     }
-    this.logger.log(`Attempting to log in for login="${login}".`);
-    const areCredsValid = isLoginValid && password === VALID_PW;
+
+    this.logger.log(`Checking credentials for login="${login}".`);
+    const areCredsValid = password === user.password;
     this.logger.log(
-      `${
-        areCredsValid ? 'Successful' : 'Unsuccessful'
-      } login for login="${login}".`,
+      `Password of login="${login}" ${
+        areCredsValid ? 'has matched' : 'has not matched'
+      }.`,
     );
     return areCredsValid;
   }
