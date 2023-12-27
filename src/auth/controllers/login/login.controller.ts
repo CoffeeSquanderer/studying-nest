@@ -10,7 +10,7 @@ import {
 import { ApiUnauthorizedResponse, ApiOkResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { LoginDto } from '../../dtos/Login.dto';
-import { LoginService } from 'src/auth/services/login/login.service';
+import { AuthService } from 'src/auth/services/auth/auth.service';
 import { UserService } from 'src/user/services/user.service';
 
 @Controller('login')
@@ -18,7 +18,7 @@ export class LoginController {
   private readonly logger = new Logger(LoginController.name);
 
   constructor(
-    private loginService: LoginService,
+    private authService: AuthService,
     private userService: UserService,
   ) {}
 
@@ -48,6 +48,6 @@ export class LoginController {
     }
     response
       .status(200)
-      .send({ 'X-Auth-Token': this.loginService.generateToken(login) });
+      .send({ 'X-Auth-Token': this.authService.generateToken(login) });
   }
 }

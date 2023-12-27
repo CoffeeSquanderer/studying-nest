@@ -7,14 +7,14 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { ValidateTokenService } from '../../services/validate-token/validate-token.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Injectable()
 export class AuthnGuard implements CanActivate {
   private readonly logger = new Logger(AuthnGuard.name);
   constructor(
-    @Inject(ValidateTokenService)
-    private validateTokenService: ValidateTokenService,
+    @Inject(AuthService)
+    private authService: AuthService,
   ) {}
 
   canActivate(
@@ -22,7 +22,7 @@ export class AuthnGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers['x-auth-token'];
-    if (!this.validateTokenService.checkIsValid(token)) {
+    if (!this.authService.checkIsValid(token)) {
       this.logger.log(`Attempt to access path="${request.path}" w/o token.`);
       throw new UnauthorizedException('Unauthorized');
     }
