@@ -1,33 +1,16 @@
-# Development
-
-FROM node:20-alpine as dev
-
-WORKDIR /app
-
-ENV NODE_ENV dev
-
-COPY . .
-
-RUN yarn --frozen-lockfile
-
-
-# Production Build
+# Build
 
 FROM node:20-alpine as build
 
 WORKDIR /app
-RUN apk add --no-cache libc6-compat
 
-ENV NODE_ENV production
+COPY package*.json yarn.lock tsconfig.json tsconfig.build.json ./
 
-# In order to run `yarn build` we need access to the Nest CLI, which is a dev dependency
-COPY --from=dev /app/node_modules ./node_modules
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
 RUN yarn build
-
-RUN yarn --frozen-lockfile --production && yarn cache clean
 
 
 # Production Server
@@ -35,11 +18,19 @@ RUN yarn --frozen-lockfile --production && yarn cache clean
 FROM node:20-alpine as prod
 
 WORKDIR /app
+
 RUN apk add --no-cache libc6-compat
+
+COPY package*.json yarn.lock ./
 
 ENV NODE_ENV production
 
 COPY --from=build /app/dist dist
-COPY --from=build /app/node_modules node_modules
+
+RUN yarn --frozen-lockfile --production && yarn cache clean
 
 CMD ["node", "dist/main.js"]
+
+# Possible improvements:
+# - no yarn (?)
+# - uglify/minify JS (?)
