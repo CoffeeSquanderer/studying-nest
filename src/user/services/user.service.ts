@@ -1,17 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(
-    @InjectModel(User)
-    private userRepository: typeof User,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   create(createUserDto: CreateUserDto) {
     this.logger.log(`About to add a new user, login="${createUserDto.login}"`);
@@ -23,22 +19,22 @@ export class UserService {
   }
 
   findById(id: number) {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findById(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     this.logger.log(`About to update a user id="${id}"`);
-    return this.userRepository.update(updateUserDto, { where: { id } });
+    return this.userRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {
     this.logger.log(`About to remove a user, id="${id}"`);
-    return this.userRepository.destroy({ where: { id } });
+    return this.userRepository.remove(id);
   }
 
   // TODO: check by email (?)
   async checkCredentials(login: string, password: string) {
-    const user = await this.userRepository.findOne({ where: { login } });
+    const user = await this.userRepository.findByLogin(login);
     if (!user) {
       this.logger.log(
         `Attempting to check credentials for login="${login}", user does not exist.`,

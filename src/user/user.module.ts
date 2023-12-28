@@ -5,11 +5,12 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserController } from './controllers/user/user.controller';
 import { UserService } from './services/user.service';
 import { User } from './entities/user.entity';
+import { UserRepository } from './repositories/user.repository';
 
 @Module({
   imports: [SequelizeModule.forFeature([User]), forwardRef(() => AuthModule)],
   controllers: [UserController, MeController],
-  providers: [UserService],
+  providers: [UserService, UserRepository],
   exports: [UserService],
 })
 export class UserModule {}
