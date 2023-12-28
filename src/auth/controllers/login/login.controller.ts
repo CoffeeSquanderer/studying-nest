@@ -30,9 +30,9 @@ export class LoginController {
     description: 'Successful login, auth token returned.',
   })
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
-    const { login, password } = loginDto;
-    if (!login) {
-      this.logger.log('Attempting to log in, login is not provided.');
+    const { loginOrEmail, password } = loginDto;
+    if (!loginOrEmail) {
+      this.logger.log('Attempting to log in, login or email is not provided.');
       throw new NotAcceptableException('No login');
     }
     if (!password) {
@@ -40,7 +40,7 @@ export class LoginController {
       throw new NotAcceptableException('No password');
     }
     const areCredsValid = await this.userService.checkCredentials(
-      login,
+      loginOrEmail,
       password,
     );
     if (!areCredsValid) {
@@ -48,6 +48,6 @@ export class LoginController {
     }
     response
       .status(200)
-      .send({ 'X-Auth-Token': this.authService.generateToken(login) });
+      .send({ 'X-Auth-Token': this.authService.generateToken(loginOrEmail) });
   }
 }

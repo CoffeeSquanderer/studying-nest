@@ -32,15 +32,19 @@ export class UserService {
     return this.userRepository.remove(id);
   }
 
-  // TODO: check by email (?)
-  async checkCredentials(login: string, password: string) {
-    const user = await this.userRepository.findByLogin(login);
+  async checkCredentials(loginOrEmail: string, password: string) {
+    const isEmail = /^\S+@\S+\.\S+$/.test(loginOrEmail);
+    const user =
+      await this.userRepository[isEmail ? 'findByEmail' : 'findByLogin'](
+        loginOrEmail,
+      );
     if (!user) {
       this.logger.log(
-        `Attempting to check credentials for login="${login}", user does not exist.`,
+        `Attempting to check credentials for loginOrEmail="${loginOrEmail}", user does not exist.`,
       );
       return false;
     }
+    const { login } = user;
 
     this.logger.log(`Checking credentials for login="${login}".`);
     const areCredsValid = password === user.password;

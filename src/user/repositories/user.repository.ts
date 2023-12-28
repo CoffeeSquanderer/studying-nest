@@ -27,6 +27,10 @@ export class UserRepository {
     return this.userModel.findOne({ where: { login } });
   }
 
+  findByEmail(email: string) {
+    return this.userModel.findOne({ where: { email } });
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return this.userModel.update(updateUserDto, { where: { id } });
   }
