@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { Log } from 'src/utils/log.decorator';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserRepository } from '../repositories/user.repository';
@@ -9,29 +10,32 @@ export class UserService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  create(createUserDto: CreateUserDto) {
-    this.logger.log(`About to add a new user, login="${createUserDto.login}"`);
-    return this.userRepository.create(createUserDto as any);
+  @Log('UserService')
+  async create(createUserDto: CreateUserDto) {
+    return await this.userRepository.create(createUserDto as any);
   }
 
-  findAll() {
-    return this.userRepository.findAll();
+  @Log('UserService')
+  async findAll() {
+    return await this.userRepository.findAll();
   }
 
-  findById(id: number) {
-    return this.userRepository.findById(id);
+  @Log('UserService')
+  async findById(id: number) {
+    return await this.userRepository.findById(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    this.logger.log(`About to update a user id="${id}"`);
-    return this.userRepository.update(id, updateUserDto);
+  @Log('UserService')
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.userRepository.update(id, updateUserDto);
   }
 
-  remove(id: number) {
-    this.logger.log(`About to remove a user, id="${id}"`);
-    return this.userRepository.remove(id);
+  @Log('UserService')
+  async remove(id: number) {
+    return await this.userRepository.remove(id);
   }
 
+  @Log('UserService')
   async checkCredentials(loginOrEmail: string, password: string) {
     const isEmail = /^\S+@\S+\.\S+$/.test(loginOrEmail);
     const user =

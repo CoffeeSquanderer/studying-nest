@@ -48,6 +48,6 @@ export class LoginController {
     }
     response
       .status(200)
-      .send({ 'X-Auth-Token': this.authService.generateToken(loginOrEmail) });
+      .send({ 'X-Auth-Token': this.authService.generateToken() });
   }
 }

@@ -22,10 +22,16 @@ export class AuthnGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers['x-auth-token'];
-    if (!this.authService.checkIsValid(token)) {
-      this.logger.log(`Attempt to access path="${request.path}" w/o token.`);
+    const isTokenValid = this.authService.checkIsValid(token);
+    if (!isTokenValid) {
+      this.logger.log(
+        `Attempt to access path="${request.path}", token is missing or invalid.`,
+      );
       throw new UnauthorizedException('Unauthorized');
     }
+    this.logger.log(
+      `Attempt to access path="${request.path}", token is valid.`,
+    );
     return true;
   }
 }

@@ -1,17 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { VALID_TOKEN } from '../../constants/credentials';
+import { Log } from 'src/utils/log.decorator';
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
-
-  generateToken(login: string) {
-    this.logger.log(`"Generating" new token for login="${login}".`);
+  @Log('AuthService')
+  generateToken() {
     return VALID_TOKEN;
   }
 
+  @Log('AuthService')
   checkIsValid(token: string) {
-    const isValid = token && token === VALID_TOKEN;
+    const isValid = token && token === VALID_TOKEN ? true : false;
     return isValid;
   }
 }
